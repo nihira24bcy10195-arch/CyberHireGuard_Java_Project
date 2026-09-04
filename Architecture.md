@@ -1,94 +1,34 @@
-
----
-
-# `docs/class-diagram.md`
-
-```markdown
-# Class Diagram
+# System Architecture
 
 ```mermaid
-classDiagram
+flowchart TD
 
-    class JobOffer {
-        -String sender
-        -String company
-        -String message
-        -double salary
-        +JobOffer()
-        +getSender()
-        +getCompany()
-        +getMessage()
-        +getSalary()
-        +setSender()
-        +setCompany()
-        +setMessage()
-        +setSalary()
-    }
+    U[User] --> UI[Main Menu / Console Interface]
 
-    class AnalysisResult {
-        -JobOffer offer
-        -int riskScore
-        -RiskLevel riskLevel
-        -List~String~ warnings
-        +getOffer()
-        +getRiskScore()
-        +getRiskLevel()
-        +getWarnings()
-    }
+    UI --> INPUT[Job Offer Input]
 
-    class Analyzer {
-        <<interface>>
-        +analyze(JobOffer)
-    }
+    INPUT --> VALID[Input Validator]
 
-    class RuleBasedAnalyzer {
-        -Set~String~ suspiciousKeywords
-        +analyze(JobOffer)
-    }
+    VALID --> ANALYZER[Rule Based Analyzer]
 
-    class AnalysisHistory {
-        -List~AnalysisResult~ results
-        -Deque~AnalysisResult~ recentResults
-        -Map~String,Integer~ companyFrequency
-        +addResult()
-        +displayHistory()
-        +displayRecentResults()
-        +displayCompanyFrequency()
-    }
+    ANALYZER --> RULES[Suspicious Keyword Rules]
 
-    class ReportGenerator {
-        +generateReport()
-    }
+    ANALYZER --> RESULT[Analysis Result]
 
-    class BatchAnalyzer {
-        -Analyzer analyzer
-        -AnalysisHistory history
-        +analyzeBatch()
-    }
+    RESULT --> HISTORY[Analysis History]
 
-    class InputValidator {
-        +validate()
-    }
+    HISTORY --> COLLECTIONS[Java Collections]
 
-    class AnalysisException {
-        +AnalysisException()
-    }
+    RESULT --> REPORT[Report Generator]
 
-    class RiskLevel {
-        <<enumeration>>
-        LOW
-        MEDIUM
-        HIGH
-        CRITICAL
-    }
+    REPORT --> STREAMS[Java Stream API]
 
-    Analyzer <|.. RuleBasedAnalyzer
+    UI --> BATCH[Batch Analyzer]
 
-    JobOffer --> AnalysisResult
-    AnalysisResult --> RiskLevel
+    BATCH --> EXECUTOR[ExecutorService]
 
-    AnalysisHistory --> AnalysisResult
-    BatchAnalyzer --> Analyzer
-    BatchAnalyzer --> AnalysisHistory
-    RuleBasedAnalyzer --> InputValidator
+    EXECUTOR --> ANALYZER
 
+    HISTORY --> OUTPUT[Console Reports]
+
+    REPORT --> OUTPUT
