@@ -1,0 +1,15 @@
+OFFER 1
+Company: TechNova
+Message: Congratulations! You have been selected. Pay a registration fee quickly.
+
+OFFER 2
+Company: SecureJobs
+Message: We would like to schedule an interview for the software developer position.
+
+OFFER 3
+Company: Global Careers
+Message: URGENT! Click on this link and provide your OTP and bank password to receive your salary.
+
+OFFER 4
+Company: Future Systems
+Message: You have been shortlisted for a software engineering position. Please attend the scheduled interview.
