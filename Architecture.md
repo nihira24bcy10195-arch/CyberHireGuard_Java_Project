@@ -1,52 +1,94 @@
 
 ---
 
-# `docs/sequence-diagram.md`
+# `docs/class-diagram.md`
 
 ```markdown
-# Sequence Diagram
+# Class Diagram
 
 ```mermaid
-sequenceDiagram
+classDiagram
 
-    actor User
-    participant Main
-    participant Validator
-    participant Analyzer
-    participant History
-    participant Report
+    class JobOffer {
+        -String sender
+        -String company
+        -String message
+        -double salary
+        +JobOffer()
+        +getSender()
+        +getCompany()
+        +getMessage()
+        +getSalary()
+        +setSender()
+        +setCompany()
+        +setMessage()
+        +setSalary()
+    }
 
-    User->>Main: Select Analyze Job Offer
-    User->>Main: Enter job offer data
+    class AnalysisResult {
+        -JobOffer offer
+        -int riskScore
+        -RiskLevel riskLevel
+        -List~String~ warnings
+        +getOffer()
+        +getRiskScore()
+        +getRiskLevel()
+        +getWarnings()
+    }
 
-    Main->>Validator: Validate offer
+    class Analyzer {
+        <<interface>>
+        +analyze(JobOffer)
+    }
 
-    Validator-->>Main: Valid input
+    class RuleBasedAnalyzer {
+        -Set~String~ suspiciousKeywords
+        +analyze(JobOffer)
+    }
 
-    Main->>Analyzer: analyze(offer)
+    class AnalysisHistory {
+        -List~AnalysisResult~ results
+        -Deque~AnalysisResult~ recentResults
+        -Map~String,Integer~ companyFrequency
+        +addResult()
+        +displayHistory()
+        +displayRecentResults()
+        +displayCompanyFrequency()
+    }
 
-    Analyzer->>Analyzer: Check suspicious keywords
-    Analyzer->>Analyzer: Calculate risk score
-    Analyzer->>Analyzer: Determine risk level
+    class ReportGenerator {
+        +generateReport()
+    }
 
-    Analyzer-->>Main: AnalysisResult
+    class BatchAnalyzer {
+        -Analyzer analyzer
+        -AnalysisHistory history
+        +analyzeBatch()
+    }
 
-    Main->>History: addResult(result)
+    class InputValidator {
+        +validate()
+    }
 
-    History-->>Main: Result stored
+    class AnalysisException {
+        +AnalysisException()
+    }
 
-    Main-->>User: Display analysis result
+    class RiskLevel {
+        <<enumeration>>
+        LOW
+        MEDIUM
+        HIGH
+        CRITICAL
+    }
 
-    User->>Main: Generate report
+    Analyzer <|.. RuleBasedAnalyzer
 
-    Main->>Report: generateReport(history)
+    JobOffer --> AnalysisResult
+    AnalysisResult --> RiskLevel
 
-    Report->>Report: Stream filtering
-    Report->>Report: Stream sorting
-    Report->>Report: Stream grouping
+    AnalysisHistory --> AnalysisResult
+    BatchAnalyzer --> Analyzer
+    BatchAnalyzer --> AnalysisHistory
+    RuleBasedAnalyzer --> InputValidator
 
-    Report-->>Main: Security report
-
-    Main-->>User: Display report
-
-    
